@@ -6,27 +6,26 @@
   <rect width="700" height="500" fill="url(#bg2)"/>
   <g stroke="#ffffff" stroke-opacity="0.05"><path d="M0 125h700M0 250h700M0 375h700M140 0v500M280 0v500M420 0v500M560 0v500"/></g>
   <g>
-    <rect x="70" y="240" width="90" height="200" rx="6" fill="#1e4272"/>
-    <rect x="180" y="170" width="100" height="270" rx="6" fill="#27507f"/>
-    <rect x="300" y="270" width="80" height="170" rx="6" fill="#1e4272"/>
-    <rect x="400" y="130" width="110" height="310" rx="6" fill="#2d5c94"/>
-    <rect x="530" y="220" width="95" height="220" rx="6" fill="#1e4272"/>
+    <rect x="130" y="230" width="72" height="130" rx="6" fill="#1e4272"/>
+    <rect x="218" y="185" width="82" height="175" rx="6" fill="#27507f"/>
+    <rect x="316" y="250" width="64" height="110" rx="6" fill="#1e4272"/>
+    <rect x="396" y="155" width="90" height="205" rx="6" fill="#2d5c94"/>
+    <rect x="502" y="215" width="76" height="145" rx="6" fill="#1e4272"/>
   </g>
   <g fill="url(#gold2)">
-    <rect x="86" y="260" width="14" height="14" rx="2"/><rect x="116" y="260" width="14" height="14" rx="2"/>
-    <rect x="86" y="292" width="14" height="14" rx="2"/><rect x="116" y="324" width="14" height="14" rx="2"/>
-    <rect x="198" y="192" width="15" height="15" rx="2"/><rect x="230" y="192" width="15" height="15" rx="2"/>
-    <rect x="198" y="226" width="15" height="15" rx="2"/><rect x="230" y="260" width="15" height="15" rx="2"/>
-    <rect x="198" y="294" width="15" height="15" rx="2"/>
-    <rect x="316" y="290" width="13" height="13" rx="2"/><rect x="344" y="322" width="13" height="13" rx="2"/>
-    <rect x="418" y="152" width="16" height="16" rx="2"/><rect x="452" y="152" width="16" height="16" rx="2"/>
-    <rect x="418" y="188" width="16" height="16" rx="2"/><rect x="452" y="224" width="16" height="16" rx="2"/>
-    <rect x="418" y="260" width="16" height="16" rx="2"/><rect x="452" y="296" width="16" height="16" rx="2"/>
-    <rect x="548" y="242" width="14" height="14" rx="2"/><rect x="578" y="274" width="14" height="14" rx="2"/>
-    <rect x="548" y="306" width="14" height="14" rx="2"/>
+    <rect x="144" y="246" width="12" height="12" rx="2"/><rect x="170" y="246" width="12" height="12" rx="2"/>
+    <rect x="144" y="274" width="12" height="12" rx="2"/><rect x="170" y="302" width="12" height="12" rx="2"/>
+    <rect x="233" y="202" width="13" height="13" rx="2"/><rect x="261" y="202" width="13" height="13" rx="2"/>
+    <rect x="233" y="232" width="13" height="13" rx="2"/><rect x="261" y="262" width="13" height="13" rx="2"/>
+    <rect x="233" y="292" width="13" height="13" rx="2"/>
+    <rect x="329" y="266" width="11" height="11" rx="2"/><rect x="353" y="294" width="11" height="11" rx="2"/>
+    <rect x="410" y="172" width="14" height="14" rx="2"/><rect x="440" y="172" width="14" height="14" rx="2"/>
+    <rect x="410" y="204" width="14" height="14" rx="2"/><rect x="440" y="236" width="14" height="14" rx="2"/>
+    <rect x="410" y="268" width="14" height="14" rx="2"/><rect x="440" y="300" width="14" height="14" rx="2"/>
+    <rect x="516" y="232" width="12" height="12" rx="2"/><rect x="542" y="260" width="12" height="12" rx="2"/>
+    <rect x="516" y="290" width="12" height="12" rx="2"/>
   </g>
-  <path d="M40 440 H660" stroke="#ffffff" stroke-opacity="0.35" stroke-width="2"/>
-  <path d="M80 400 L220 350 L360 380 L500 300 L640 250" stroke="#11c4a8" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <circle cx="640" cy="250" r="9" fill="#11c4a8"/>
-  <g font-family="Georgia, serif" fill="#e8b84b" font-size="26" opacity="0.9"><text x="60" y="478">Every door, accounted for</text></g>
+  <path d="M110 360 H595" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2.5"/>
+  <path d="M130 330 L240 295 L350 315 L460 260 L575 225" stroke="#11c4a8" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="575" cy="225" r="8" fill="#11c4a8"/>
 </svg>

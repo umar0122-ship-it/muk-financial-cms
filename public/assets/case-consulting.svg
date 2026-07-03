@@ -6,18 +6,18 @@
   <rect width="700" height="500" fill="url(#bg3)"/>
   <g stroke="#ffffff" stroke-opacity="0.05"><path d="M0 125h700M0 250h700M0 375h700M140 0v500M280 0v500M420 0v500M560 0v500"/></g>
   <g>
-    <rect x="90" y="90" width="230" height="300" rx="12" fill="#122a4d" stroke="#2d5c94" stroke-width="2"/>
-    <rect x="118" y="122" width="120" height="14" rx="7" fill="url(#gold3)"/>
-    <rect x="118" y="156" width="174" height="9" rx="4.5" fill="#ffffff" opacity="0.28"/>
-    <rect x="118" y="180" width="174" height="9" rx="4.5" fill="#ffffff" opacity="0.28"/>
-    <rect x="118" y="204" width="130" height="9" rx="4.5" fill="#ffffff" opacity="0.28"/>
-    <rect x="118" y="242" width="174" height="9" rx="4.5" fill="#ffffff" opacity="0.18"/>
-    <rect x="118" y="266" width="150" height="9" rx="4.5" fill="#ffffff" opacity="0.18"/>
-    <circle cx="258" cy="336" r="30" fill="none" stroke="#11c4a8" stroke-width="5"/>
-    <path d="M244 336 l10 10 l20 -22" stroke="#11c4a8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="160" y="140" width="180" height="230" rx="12" fill="#122a4d" stroke="#2d5c94" stroke-width="2"/>
+    <rect x="182" y="165" width="95" height="12" rx="6" fill="url(#gold3)"/>
+    <rect x="182" y="192" width="136" height="8" rx="4" fill="#ffffff" opacity="0.28"/>
+    <rect x="182" y="212" width="136" height="8" rx="4" fill="#ffffff" opacity="0.28"/>
+    <rect x="182" y="232" width="104" height="8" rx="4" fill="#ffffff" opacity="0.28"/>
+    <rect x="182" y="262" width="136" height="8" rx="4" fill="#ffffff" opacity="0.18"/>
+    <rect x="182" y="282" width="118" height="8" rx="4" fill="#ffffff" opacity="0.18"/>
+    <circle cx="292" cy="330" r="24" fill="none" stroke="#11c4a8" stroke-width="4.5"/>
+    <path d="M281 330 l8 8 l16 -18" stroke="#11c4a8" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <path d="M380 170 C470 175 560 220 630 320" stroke="#e06a5a" stroke-width="4.5" fill="none" stroke-dasharray="2 9" stroke-linecap="round"/>
-  <path d="M380 170 C480 240 560 320 630 400" stroke="url(#gold3)" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <circle cx="380" cy="170" r="8" fill="#e8b84b"/>
-  <g font-family="Georgia, serif" fill="#e8b84b" font-size="26" opacity="0.9"><text x="378" y="120">Sole prop to S-Corp</text></g>
+  <path d="M395 200 C460 190 510 205 555 250" stroke="#e06a5a" stroke-width="4.5" fill="none" stroke-dasharray="2 9" stroke-linecap="round"/>
+  <path d="M395 200 C470 250 510 290 550 320" stroke="url(#gold3)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="395" cy="200" r="8" fill="#e8b84b"/>
+  <path d="M535 318 L562 330 L546 348 Z" fill="#e8b84b"/>
 </svg>
