@@ -50,7 +50,7 @@
         <nav class="nav" aria-label="Main">
           <div class="nav-inner">
             <a class="brand" href="/">
-              <img class="brand-mark" src="/assets/logo.svg" alt=""/>
+              <img class="brand-mark" src="/assets/logo-mark.png" alt=""/>
               <span>
                 <span class="brand-name">${esc(site.name || 'MUK Financial')}</span><br>
                 <span class="brand-sub">${esc(site.tagline || '')}</span>
@@ -85,7 +85,7 @@
         <div class="footer-top">
           <div class="f-about">
             <a class="brand" href="/">
-              <img class="brand-mark" src="/assets/logo.svg" alt=""/>
+              <img class="brand-mark" src="/assets/logo-mark.png" alt=""/>
               <span>
                 <span class="brand-name" style="color:#fff">${esc(site.name || 'MUK Financial')}</span><br>
                 <span class="brand-sub">${esc(site.tagline || '')}</span>
