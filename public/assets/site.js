@@ -244,6 +244,13 @@
 
     contact(c) {
       const site = c.site || {};
+      fill('contact-process', (c.process || []).map(p => `
+        <div class="tl-step reveal">
+          <span class="dot"></span>
+          <span class="tl-when">${esc(p.step)}</span>
+          <h4>${esc(p.title)}</h4>
+          <p>${esc(p.description)}</p>
+        </div>`).join(''));
       fill('contact-email', site.email ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : '<span>—</span>');
       const cal = (site.calendar_url || '').trim();
       const calHref = cal || `mailto:${site.email || ''}?subject=${encodeURIComponent('Virtual call request')}`;
