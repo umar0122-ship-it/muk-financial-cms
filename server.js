@@ -1,4 +1,4 @@
-const express      = require('express');
+﻿const express      = require('express');
 const path         = require('path');
 const fs           = require('fs');
 const multer       = require('multer');
@@ -10,22 +10,27 @@ const app = express();
 const PORT       = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'muk-fin-secret-change-in-prod-2026';
 
-// ─── Paths ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Paths â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DATA_FILE   = path.join(__dirname, 'data', 'content.json');
 const ADMIN_FILE  = path.join(__dirname, 'data', 'admin.json');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const UPLOADS_DIR = path.join(__dirname, 'data', 'uploads');
 const PUBLIC_DIR  = path.join(__dirname, 'public');
 const ADMIN_DIR   = path.join(__dirname, 'admin');
 
+// Seed data files into the (possibly empty) mounted volume on first boot
+const SEED_DIR = path.join(__dirname, 'seed');
+if (!fs.existsSync(path.dirname(DATA_FILE))) fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+if (!fs.existsSync(DATA_FILE)  && fs.existsSync(path.join(SEED_DIR, 'content.json'))) fs.copyFileSync(path.join(SEED_DIR, 'content.json'), DATA_FILE);
+if (!fs.existsSync(ADMIN_FILE) && fs.existsSync(path.join(SEED_DIR, 'admin.json')))  fs.copyFileSync(path.join(SEED_DIR, 'admin.json'),  ADMIN_FILE);
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const readContent = ()     => JSON.parse(fs.readFileSync(DATA_FILE,  'utf8'));
 const saveContent = (d)    => fs.writeFileSync(DATA_FILE,  JSON.stringify(d, null, 2));
 const readAdmin   = ()     => JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
 const saveAdmin   = (d)    => fs.writeFileSync(ADMIN_FILE, JSON.stringify(d, null, 2));
 
-// ─── Multer ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Multer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const storage = multer.diskStorage({
   destination: (_, __, cb) => cb(null, UPLOADS_DIR),
   filename:    (_, file, cb) => {
@@ -43,12 +48,12 @@ const upload = multer({
   }
 });
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Middleware â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 app.use('/uploads', express.static(UPLOADS_DIR));
 
-// ─── Auth middleware ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Auth middleware â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function requireAuth(req, res, next) {
   const token = req.cookies.admin_token ||
                 (req.headers['authorization'] || '').replace('Bearer ', '');
@@ -57,7 +62,7 @@ function requireAuth(req, res, next) {
   catch { res.status(401).json({ error: 'Invalid or expired session' }); }
 }
 
-// ─── Site pages (multi-page, content JSON injected into each) ────────────────
+// â”€â”€â”€ Site pages (multi-page, content JSON injected into each) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const PAGES = {
   '/':             'index.html',
   '/services':     'services.html',
@@ -84,17 +89,17 @@ for (const [route, file] of Object.entries(PAGES)) {
   if (route !== '/') app.get(`${route}.html`, servePage(file)); // /contact.html also works
 }
 
-// Static assets (CSS, JS, fonts — HTML pages go through template injection above)
+// Static assets (CSS, JS, fonts â€” HTML pages go through template injection above)
 app.use(express.static(PUBLIC_DIR, { index: false, extensions: false }));
 
-// ─── Admin panel ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Admin panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 app.get('/admin', (_, res) => res.sendFile(path.join(ADMIN_DIR, 'index.html')));
 app.get('/admin/{*path}', (_, res) => res.sendFile(path.join(ADMIN_DIR, 'index.html')));
 app.use('/admin-static', express.static(ADMIN_DIR));
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // AUTH ROUTES
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body;
   const admin = readAdmin();
@@ -124,21 +129,21 @@ app.post('/api/auth/change-password', requireAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CONTENT API
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// ─── Content version (site polls this to detect changes) ─────────────────────
+// â”€â”€â”€ Content version (site polls this to detect changes) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let contentVersion = Date.now();
 function bumpVersion() { contentVersion = Date.now(); }
 
-// Public – site reads this on every page load
+// Public â€“ site reads this on every page load
 app.get('/api/content', (_, res) => res.json(readContent()));
 
-// Public – lightweight version check (site polls every 5s)
+// Public â€“ lightweight version check (site polls every 5s)
 app.get('/api/content/version', (_, res) => res.json({ version: contentVersion }));
 
-// PATCH /api/content/:section  – update a scalar section (site, hero)
+// PATCH /api/content/:section  â€“ update a scalar section (site, hero)
 app.patch('/api/content/:section', requireAuth, (req, res) => {
   const { section } = req.params;
   const content = readContent();
@@ -151,7 +156,7 @@ app.patch('/api/content/:section', requireAuth, (req, res) => {
   res.json({ success: true, data: content[section] });
 });
 
-// PATCH /api/content/:section/:id  – update one item in an array section
+// PATCH /api/content/:section/:id  â€“ update one item in an array section
 app.patch('/api/content/:section/:id', requireAuth, (req, res) => {
   const { section, id } = req.params;
   const content = readContent();
@@ -165,7 +170,7 @@ app.patch('/api/content/:section/:id', requireAuth, (req, res) => {
   res.json({ success: true, data: content[section][idx] });
 });
 
-// POST /api/content/:section  – add item
+// POST /api/content/:section  â€“ add item
 app.post('/api/content/:section', requireAuth, (req, res) => {
   const { section } = req.params;
   const content = readContent();
@@ -194,9 +199,9 @@ app.delete('/api/content/:section/:id', requireAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // IMAGE UPLOAD
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 app.post('/api/upload', requireAuth, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file received' });
   res.json({ success: true, url: `/uploads/${req.file.filename}`, filename: req.file.filename });
@@ -223,10 +228,11 @@ app.delete('/api/uploads/:filename', requireAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// ─── Start ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Start â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 app.listen(PORT, () => {
-  console.log(`\n✅  MUK Financial CMS`);
+  console.log(`\nâœ…  MUK Financial CMS`);
   console.log(`    Site:  http://localhost:${PORT}`);
   console.log(`    Admin: http://localhost:${PORT}/admin`);
   console.log(`    Login: admin / Admin@MUK2026\n`);
 });
+

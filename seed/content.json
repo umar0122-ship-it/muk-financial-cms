@@ -1,0 +1,196 @@
+{
+  "site": {
+    "name": "MUK Financial Operations",
+    "tagline": "US Business Finance & Operations",
+    "email": "hello@mukfinancial.com",
+    "linkedin": "https://www.linkedin.com/in/muhammad-umer-khan-b2a04a67/",
+    "phone": "",
+    "formspree_id": "YOUR_FORM_ID"
+  },
+  "hero": {
+    "eyebrow": "Remote Financial Operations for US Businesses",
+    "headline": "Your Finance Department. Without the Overhead.",
+    "subheadline": "We provide institutional-grade bookkeeping, tax strategy, and financial intelligence for US small and mid-sized businesses — at a fraction of in-house cost.",
+    "cta_primary": "Schedule a Free Consultation",
+    "cta_secondary": "Explore Services",
+    "stats": [
+      { "value": "14+", "label": "Years Global Banking" },
+      { "value": "4+",  "label": "Years US Tax & Accounting" },
+      { "value": "All Entities", "label": "LLC · S-Corp · C-Corp" },
+      { "value": "Up to 60%", "label": "Lower Than In-House" }
+    ]
+  },
+  "services": [
+    {
+      "id": 1,
+      "num": "01",
+      "color": "teal",
+      "title": "Professional Bookkeeping & Cleanup",
+      "description": "Comprehensive monthly categorization, bank reconciliations, chart of accounts optimization, and full catch-up services for disorganized books. QBO & Xero certified.",
+      "tags": ["QuickBooks Online", "Xero", "Bank Reconciliation", "Cleanup Projects"]
+    },
+    {
+      "id": 2,
+      "num": "02",
+      "color": "gold",
+      "title": "Tax Strategy & Preparation",
+      "description": "Federal tax returns prepared for all entity types, with strategic year-round planning to legally minimize tax liability. We partner with licensed CPAs for review and filing sign-off.",
+      "tags": ["1040 / Schedule C", "1065 Partnerships", "1120-S S-Corps", "1120 C-Corps"]
+    },
+    {
+      "id": 3,
+      "num": "03",
+      "color": "blue",
+      "title": "Custom Financial Intelligence Apps",
+      "description": "Python-powered dashboards, advanced Excel models, cash flow tracking systems, payment analytics portals, and reconciliation tools built for your specific business needs.",
+      "tags": ["Python / Streamlit", "Advanced Excel", "Cash Flow Analytics", "Custom Dashboards"]
+    },
+    {
+      "id": 4,
+      "num": "04",
+      "color": "purple",
+      "title": "Due Diligence & Loan Advisory",
+      "description": "SBA loan packages, lender-grade financial narratives, Quality of Earnings (QoE) analysis, and M&A due diligence support — informed by 14+ years of credit underwriting.",
+      "tags": ["SBA Loan Packages", "QoE Analysis", "M&A Support", "Financial Projections"]
+    },
+    {
+      "id": 5,
+      "num": "05",
+      "color": "red",
+      "title": "Executive Support & Operations",
+      "description": "Email management, calendar coordination, client follow-up systems, CRM maintenance — keeping your communications organized so you can focus on strategic decisions.",
+      "tags": ["Gmail / Outlook", "Calendar Management", "CRM Systems", "Client Communications"]
+    },
+    {
+      "id": 6,
+      "num": "06",
+      "color": "pink",
+      "title": "Digital Presence & Thought Leadership",
+      "description": "LinkedIn content strategy, financial education content, client success storytelling, and consistent professional presence — positioning you as a trusted industry leader.",
+      "tags": ["LinkedIn Strategy", "Content Development", "Professional Branding", "Thought Leadership"]
+    }
+  ],
+  "industries": [
+    { "id": 1, "icon": "🏗️", "name": "Construction & Contracting" },
+    { "id": 2, "icon": "🛠️", "name": "Insurance Restoration" },
+    { "id": 3, "icon": "💼", "name": "Consulting & Professional Services" },
+    { "id": 4, "icon": "🏠", "name": "Real Estate & Property Investors" },
+    { "id": 5, "icon": "🧑‍💻", "name": "Freelancers & Self-Employed" },
+    { "id": 6, "icon": "🏥", "name": "Healthcare & Medical Practices" },
+    { "id": 7, "icon": "🛍️", "name": "Retail & E-Commerce" },
+    { "id": 8, "icon": "📊", "name": "CPA & Accounting Firms (Outsourcing)" }
+  ],
+  "cases": [
+    {
+      "id": 1,
+      "tag": "CONSTRUCTION · TEXAS",
+      "tag_color": "teal",
+      "title": "\"18 Months of Financial Records Cleaned and Optimized in 3 Weeks\"",
+      "body": "A Texas-based general contractor had not reconciled accounts in over 18 months. We completed full backlog cleanup, identified deductible expenses, restructured the chart of accounts, and produced lender-ready financials for an SBA loan application — all within the first month of engagement.",
+      "stat1_value": "$14,200",
+      "stat1_label": "Previously Unclaimed Deductions",
+      "stat2_value": "3 Weeks",
+      "stat2_label": "Full Cleanup Cycle",
+      "image": ""
+    },
+    {
+      "id": 2,
+      "tag": "INSURANCE RESTORATION · DALLAS",
+      "tag_color": "gold",
+      "title": "\"Our First Clean P&L in Four Years — Ready for Investors\"",
+      "body": "An insurance restoration company with multiple active projects had commingled personal and business finances for years. We separated accounts, built project-level P&Ls, cleaned 4 years of records, and delivered investor-ready financials in under 6 weeks.",
+      "stat1_value": "4 Years",
+      "stat1_label": "Books Reconstructed",
+      "stat2_value": "6 Weeks",
+      "stat2_label": "Turnaround",
+      "image": ""
+    },
+    {
+      "id": 3,
+      "tag": "CONSULTING FIRM · FLORIDA",
+      "tag_color": "purple",
+      "title": "\"Saved the S-Corp Election Deadline With 3 Days to Spare\"",
+      "body": "A Florida-based management consultant earning $280K had been filing as a sole proprietor. We identified the S-Corp opportunity, coordinated CPA election filing, restructured compensation, and set up a payroll system — saving significant self-employment tax in year one.",
+      "stat1_value": "$8,400",
+      "stat1_label": "Estimated Tax Savings Yr 1",
+      "stat2_value": "3 Days",
+      "stat2_label": "Before Deadline",
+      "image": ""
+    }
+  ],
+  "pricing": [
+    {
+      "id": 1,
+      "featured": false,
+      "name": "Foundation",
+      "price": "$400",
+      "period": "/mo",
+      "description": "For startups and solopreneurs who need clean books and basic tax support.",
+      "features": [
+        "Monthly Bookkeeping (up to 150 transactions)",
+        "Bank & Credit Card Reconciliation",
+        "Monthly P&L + Balance Sheet",
+        "Annual 1040 / Schedule C Preparation",
+        "1 Custom Excel Report",
+        "Email Support (48-hr response)"
+      ],
+      "cta": "Get Started"
+    },
+    {
+      "id": 2,
+      "featured": true,
+      "name": "Growth",
+      "price": "$900",
+      "period": "/mo",
+      "description": "For growing businesses that need comprehensive financial operations.",
+      "features": [
+        "Monthly Bookkeeping (up to 400 transactions)",
+        "Full Reconciliation + AR/AP Tracking",
+        "Weekly Cash Flow Reporting",
+        "Entity Tax Return (1065 / 1120-S / 1120)",
+        "Custom Dashboard or Excel Model",
+        "Executive Support (10 hrs/mo)",
+        "Priority Slack/WhatsApp Support"
+      ],
+      "cta": "Most Popular — Start Here"
+    },
+    {
+      "id": 3,
+      "featured": false,
+      "name": "Enterprise",
+      "price": "Custom",
+      "period": "",
+      "description": "Full-service financial operations for multi-entity or high-complexity businesses.",
+      "features": [
+        "Unlimited Transaction Volume",
+        "Multi-Entity Bookkeeping",
+        "Quarterly QoE or Due Diligence",
+        "SBA / Lender Package Prep",
+        "Advanced Custom Applications",
+        "Full Executive Support (unlimited)",
+        "Dedicated Account Lead"
+      ],
+      "cta": "Schedule Strategy Call"
+    }
+  ],
+  "process": [
+    { "id": 1, "step": "Day 1", "title": "Discovery Call", "description": "30-minute consultation to understand your business, pain points, and goals. No commitment required." },
+    { "id": 2, "step": "Day 2–3", "title": "Proposal & Scope", "description": "We deliver a custom engagement proposal with clear deliverables, timeline, and pricing." },
+    { "id": 3, "step": "Day 3–4", "title": "Onboarding", "description": "Secure access setup, document collection, and system integrations. We handle the technical lift." },
+    { "id": 4, "step": "Day 5–7", "title": "First Deliverable", "description": "You receive your first output — clean books, a report, or a financial model — within the first week." }
+  ],
+  "tech": [
+    { "id": 1,  "name": "QuickBooks Online", "color": "#2CA01C" },
+    { "id": 2,  "name": "Xero",              "color": "#13B5EA" },
+    { "id": 3,  "name": "Google Workspace",  "color": "#4285F4" },
+    { "id": 4,  "name": "Gmail",             "color": "#EA4335" },
+    { "id": 5,  "name": "LinkedIn",          "color": "#0A66C2" },
+    { "id": 6,  "name": "HubSpot CRM",       "color": "#FF7A59" },
+    { "id": 7,  "name": "PayPal / Stripe",   "color": "#00457C" },
+    { "id": 8,  "name": "Microsoft Excel",   "color": "#217346" },
+    { "id": 9,  "name": "Python / Streamlit","color": "#3776AB" },
+    { "id": 10, "name": "Notion",            "color": "#000000" },
+    { "id": 11, "name": "Jira / Asana",      "color": "#0052CC" },
+    { "id": 12, "name": "Slack",             "color": "#36C5F0" }
+  ]
+}
