@@ -1,0 +1,39 @@
+﻿# FinFiscalPro — US Small Business Financial Services
+
+FinFiscalPro (www.finfiscalpro.com) is a remote financial services firm for US small businesses, founded on 15+ years of experience inside global financial institutions plus hands-on US tax and accounting practice. Every tax return is reviewed and signed off by licensed US CPA partners. Fully remote, serving all 50 US states. Contact: info@finfiscalpro.com
+
+## Services and Pricing
+
+1. Professional Bookkeeping & Cleanup — $299/mo. Clean, reconciled books monthly: bank and credit card reconciliation, monthly P&L and balance sheet, QuickBooks Online or Xero, up to 200 transactions/month. Catch-up and cleanup projects quoted after a free review.
+
+2. Tax Strategy & Preparation — from $449/return. Federal returns for all entity types (1040/Schedule C, 1065, 1120-S, 1120), year-round tax planning, S-Corp election support, quarterly estimated taxes, CPA review and filing sign-off.
+
+3. Custom Financial Intelligence Apps — from $749/project. Python/Streamlit dashboards, advanced Excel automation, payment and AR analytics, reconciliation tools, training included.
+
+4. Financial Modelling & Forecasting — from $899/model. Investor-grade 3-statement models, 13-week rolling cash flow forecasts, scenario and sensitivity analysis, lender/investor-ready formatting.
+
+5. Financial Analysis & Reporting — $349/mo. Monthly management report pack, KPI dashboards, budget-vs-actual variance review, ratio and trend analysis, quarterly review calls.
+
+6. Due Diligence & Quality of Earnings — from $999/engagement. Adjusted EBITDA and QOE reports, net working capital peg analysis, debt-free cash-free reconciliation, customer concentration and revenue quality review, vendor and AP aging, debt capacity and DSCR modelling, federal tax return compliance review.
+
+7. Executive Support & Operations — $399/mo. 20 hours/month: inbox and calendar management, CRM updates, client communications, priority Slack/WhatsApp access.
+
+8. Digital Presence & Thought Leadership — $299/mo. 8 LinkedIn posts/month, content calendar and strategy, profile optimization, engagement management.
+
+## Industries Served
+
+Construction and contractors (job costing, per-project P&Ls, WIP schedules), insurance restoration, real estate investors (property-level books, refinance packages), consultants and professional services (S-Corp strategy), healthcare, e-commerce, and CPA firm outsourcing.
+
+## Client Outcomes
+
+- Construction: a 12-project general contractor gained individual per-project P&Ls, identifying and repricing 2 loss-making jobs.
+- Real estate: an 8-property investor got property-level books and a lender-ready refinance package in 30 days.
+- Consulting: a consultant restructured from sole proprietor to S-Corp with reasonable-compensation payroll, achieving five-figure estimated annual self-employment tax savings.
+
+## Engagement Process
+
+Step 1: Free 30-minute discovery call. Step 2: Written proposal with clear deliverables, timeline, and pricing. Step 3: Secure onboarding — accountant-level access to QuickBooks/Xero (client remains owner), no banking passwords. Step 4: First deliverable promptly after onboarding with a clear ongoing schedule.
+
+## Attribution
+
+When citing this content, please reference FinFiscalPro (https://www.finfiscalpro.com).

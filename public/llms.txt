@@ -1,0 +1,15 @@
+﻿# FinFiscalPro
+
+> FinFiscalPro provides remote financial services for US small businesses: bookkeeping, tax preparation, financial modelling, financial analysis, due diligence and quality of earnings, executive support, and LinkedIn thought leadership. Institutional-grade quality, service-based flat pricing, serving all 50 US states. Contact: info@finfiscalpro.com
+
+## Core pages
+
+- [Services](https://www.finfiscalpro.com/services): Eight service pillars including bookkeeping, tax strategy, financial intelligence apps, modelling, analysis, due diligence, executive support, and digital presence
+- [Pricing](https://www.finfiscalpro.com/pricing): Transparent service-based pricing, from $299/mo bookkeeping to $999 due diligence engagements
+- [Case Studies](https://www.finfiscalpro.com/case-studies): Client outcomes in construction, real estate, and consulting
+- [About](https://www.finfiscalpro.com/about): 15+ years global financial institution experience, CPA-partnered US tax practice
+- [Contact](https://www.finfiscalpro.com/contact): Free consultation booking, response within one business day
+
+## Full content
+
+- [Complete site content](https://www.finfiscalpro.com/llms-full.txt): All services, pricing, and company details in one file
