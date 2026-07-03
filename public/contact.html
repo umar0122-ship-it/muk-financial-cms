@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | MUK Financial Operations</title>
+  <meta name="description" content="Book a free 30-minute consultation. We reply to every enquiry within one business day." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a1628'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='%23e8b84b' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#0a1628" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <!-- __CONTENT_INJECT__ -->
+</head>
+<body data-page="contact">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header"></header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">/</span><span class="cur">Contact</span></nav>
+        <span class="eyebrow">Get in touch</span>
+        <h1>Book your free consultation</h1>
+        <p class="lede">Tell us where your finances stand today. We reply to every enquiry within one business day — usually much faster.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container contact-grid">
+        <!-- Info -->
+        <aside class="info-card reveal">
+          <h3>Contact details</h3>
+          <p>Prefer email or LinkedIn? Reach us directly on any channel below.</p>
+          <div class="info-row">
+            <span class="i-ico">✉</span>
+            <div><b>Email</b><span id="contact-email"></span></div>
+          </div>
+          <div class="info-row">
+            <span class="i-ico">☎</span>
+            <div><b>Phone / WhatsApp</b><span id="contact-phone"></span></div>
+          </div>
+          <div class="info-row">
+            <span class="i-ico">in</span>
+            <div><b>LinkedIn</b><span id="contact-li"></span></div>
+          </div>
+          <div class="info-row">
+            <span class="i-ico">🌐</span>
+            <div><b>Coverage</b><span>Fully remote · All 50 US states</span></div>
+          </div>
+          <div class="hours">
+            <b>Response time</b>
+            Enquiries answered within one business day, Monday–Saturday. Urgent tax-deadline matters are prioritized same-day.
+          </div>
+        </aside>
+
+        <!-- Form -->
+        <div class="form-card reveal">
+          <h3>Send us a message</h3>
+          <p>A few details help us prepare for your call. Fields marked <span style="color:var(--gold)">*</span> are required.</p>
+          <form id="contact-form" novalidate>
+            <div class="f-row">
+              <div class="f-group">
+                <label for="cf-name">Full name <span class="req">*</span></label>
+                <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Jane Smith" />
+              </div>
+              <div class="f-group">
+                <label for="cf-email">Work email <span class="req">*</span></label>
+                <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="jane@company.com" />
+              </div>
+            </div>
+            <div class="f-row">
+              <div class="f-group">
+                <label for="cf-company">Company</label>
+                <input id="cf-company" name="company" type="text" autocomplete="organization" placeholder="Company LLC" />
+              </div>
+              <div class="f-group">
+                <label for="cf-interest">I'm interested in</label>
+                <select id="cf-interest" name="interest">
+                  <option>Free consultation</option>
+                  <option>Bookkeeping / cleanup</option>
+                  <option>Tax preparation &amp; strategy</option>
+                  <option>Custom dashboards &amp; reporting</option>
+                  <option>Due diligence / loan advisory</option>
+                  <option>Executive support</option>
+                  <option value="Foundation">Foundation plan</option>
+                  <option value="Growth">Growth plan</option>
+                  <option value="Enterprise">Enterprise plan</option>
+                  <option>Something else</option>
+                </select>
+              </div>
+            </div>
+            <div class="f-group">
+              <label for="cf-message">How can we help? <span class="req">*</span></label>
+              <textarea id="cf-message" name="message" required placeholder="e.g. We're 14 months behind on bookkeeping and applying for an SBA loan in Q4…"></textarea>
+            </div>
+            <button class="btn btn-gold btn-block" type="submit">Send message</button>
+            <div class="form-status" id="form-status" role="status"></div>
+            <p class="form-note">Your details are used only to respond to this enquiry. We never share them.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow center">Before you write</span>
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq">
+          <details class="faq-item reveal">
+            <summary>What happens on the first call?</summary>
+            <div class="faq-a">A relaxed 30-minute conversation about your business, your current bookkeeping setup, and what's causing pain. You'll get honest first impressions and a recommended next step — even if that step isn't hiring us.</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you work with businesses outside the US?</summary>
+            <div class="faq-a">Our focus is US-registered entities (LLC, S-Corp, C-Corp, partnerships) and US tax filings. If your business is US-registered, your physical location doesn't matter.</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>How do you keep my financial data secure?</summary>
+            <div class="faq-a">We use accountant-level access in QuickBooks/Xero (you stay the owner), secure document collection during onboarding, and never ask for banking passwords. Access can be revoked by you at any time.</div>
+          </details>
+          <details class="faq-item reveal">
+            <summary>How quickly can you start?</summary>
+            <div class="faq-a">Onboarding typically begins within 2–3 days of a signed proposal, with your first deliverable inside the first week.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="site-footer"></footer>
+  <script src="/assets/site.js"></script>
+</body>
+</html>

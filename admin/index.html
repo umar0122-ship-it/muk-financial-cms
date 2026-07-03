@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MUK Admin Panel</title>
+<style>
+  :root {
+    --navy: #0a1628; --navy2: #0e1f3d; --teal: #0d9488;
+    --gold: #c9953a; --red: #dc2626; --green: #16a34a;
+    --bg: #f0f2f5; --white: #fff; --border: #e2e6ea;
+    --text: #1e293b; --muted: #64748b; --sidebar-w: 240px;
+    --radius: 8px; --shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w); background: var(--navy); color: #fff;
+    display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo { padding: 1.2rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .sidebar-logo strong { display: block; font-size: 0.9rem; color: #e8b84b; letter-spacing: .5px; }
+  .sidebar-logo span   { font-size: 0.7rem; color: rgba(255,255,255,.4); }
+  .sidebar-nav { flex: 1; padding: .75rem 0; }
+  .nav-group { margin-bottom: .25rem; }
+  .nav-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,.3); padding: .5rem 1.25rem .25rem; text-transform: uppercase; }
+  .nav-item { display: flex; align-items: center; gap: .6rem; padding: .55rem 1.25rem; cursor: pointer; font-size: .82rem; color: rgba(255,255,255,.65); transition: all .15s; border-radius: 0; text-decoration: none; border-left: 3px solid transparent; }
+  .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav-item.active { background: rgba(13,148,136,.15); color: var(--teal); border-left-color: var(--teal); }
+  .nav-icon { font-size: 1rem; width: 18px; text-align: center; }
+  .sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,.08); }
+  .logout-btn { width: 100%; padding: .5rem; background: rgba(220,38,38,.15); color: #f87171; border: 1px solid rgba(220,38,38,.25); border-radius: var(--radius); cursor: pointer; font-size: .8rem; }
+  .logout-btn:hover { background: rgba(220,38,38,.25); }
+
+  /* ── MAIN ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+  #topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: .9rem 1.75rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 90; }
+  #topbar h1 { font-size: 1rem; font-weight: 700; }
+  #topbar .topbar-right { display: flex; gap: .75rem; align-items: center; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .status-text { font-size: .75rem; color: var(--muted); }
+  .view-site { font-size: .78rem; color: var(--teal); text-decoration: none; padding: .35rem .75rem; border: 1px solid var(--teal); border-radius: var(--radius); transition: all .15s; }
+  .view-site:hover { background: var(--teal); color: #fff; }
+
+  #content { padding: 1.75rem; flex: 1; }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-title { font-size: 1.3rem; font-weight: 700; margin-bottom: .4rem; }
+  .panel-desc  { color: var(--muted); font-size: .84rem; margin-bottom: 1.5rem; }
+
+  /* ── CARDS ── */
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+  .card-title { font-weight: 700; font-size: .9rem; }
+  .card-actions { display: flex; gap: .5rem; }
+
+  /* ── FORM ELEMENTS ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; gap: .3rem; }
+  .field label { font-size: .78rem; font-weight: 600; color: var(--text); }
+  .field input, .field textarea, .field select {
+    padding: .55rem .75rem; border: 1px solid var(--border); border-radius: var(--radius);
+    font-size: .84rem; font-family: inherit; transition: border-color .15s; background: var(--white); color: var(--text);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,.1); }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field .hint { font-size: .72rem; color: var(--muted); }
+
+  /* ── BUTTONS ── */
+  .btn { padding: .5rem 1rem; border-radius: var(--radius); font-size: .82rem; font-weight: 600; cursor: pointer; border: none; transition: all .15s; display: inline-flex; align-items: center; gap: .4rem; }
+  .btn-primary  { background: var(--teal); color: #fff; }
+  .btn-primary:hover  { background: #0b8278; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--border); }
+  .btn-danger   { background: rgba(220,38,38,.1); color: var(--red); border: 1px solid rgba(220,38,38,.2); }
+  .btn-danger:hover { background: var(--red); color: #fff; }
+  .btn-success  { background: var(--green); color: #fff; }
+  .btn-sm { padding: .35rem .7rem; font-size: .75rem; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── ITEM LIST (services, cases, etc.) ── */
+  .item-list { display: flex; flex-direction: column; gap: .75rem; }
+  .item-row { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 1rem; box-shadow: var(--shadow); }
+  .item-badge { font-size: .7rem; font-weight: 700; padding: .2rem .5rem; border-radius: 4px; background: #eff6ff; color: #2563eb; flex-shrink: 0; }
+  .item-body { flex: 1; }
+  .item-body strong { display: block; font-size: .88rem; margin-bottom: .2rem; }
+  .item-body p { font-size: .78rem; color: var(--muted); line-height: 1.4; }
+  .item-controls { display: flex; gap: .4rem; flex-shrink: 0; }
+
+  /* ── TAGS EDITOR ── */
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: .4rem; border: 1px solid var(--border); border-radius: var(--radius); padding: .5rem; min-height: 42px; }
+  .tag-pill { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: .2rem .55rem; border-radius: 100px; font-size: .75rem; display: flex; align-items: center; gap: .3rem; }
+  .tag-pill .rm { cursor: pointer; opacity: .6; font-size: .9rem; line-height: 1; }
+  .tag-pill .rm:hover { opacity: 1; }
+  .tag-add-row { display: flex; gap: .4rem; margin-top: .5rem; }
+  .tag-add-row input { flex: 1; padding: .4rem .6rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: .8rem; }
+
+  /* ── IMAGE UPLOAD ── */
+  .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; cursor: pointer; transition: all .15s; }
+  .upload-zone:hover { border-color: var(--teal); background: rgba(13,148,136,.03); }
+  .upload-zone.dragging { border-color: var(--teal); background: rgba(13,148,136,.06); }
+  .upload-zone p { font-size: .82rem; color: var(--muted); margin-top: .4rem; }
+  .upload-zone .icon { font-size: 2rem; }
+  .upload-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: var(--radius); margin-top: .75rem; }
+  .image-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .75rem; margin-top: 1rem; }
+  .gallery-item { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .gallery-item img { width: 100%; height: 80px; object-fit: cover; display: block; }
+  .gallery-item .gal-actions { position: absolute; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; gap: .4rem; }
+  .gallery-item:hover .gal-actions { display: flex; }
+
+  /* ── TOAST ── */
+  #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: .5rem; pointer-events: none; }
+  .toast-msg { background: var(--navy); color: #fff; padding: .7rem 1.1rem; border-radius: var(--radius); font-size: .82rem; box-shadow: 0 4px 20px rgba(0,0,0,.25); animation: toastIn .25s ease; display: flex; align-items: center; gap: .5rem; pointer-events: all; }
+  .toast-msg.success { border-left: 3px solid var(--green); }
+  .toast-msg.error   { border-left: 3px solid var(--red); }
+  @keyframes toastIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+  /* ── LOGIN ── */
+  #login-overlay { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  .login-box { background: var(--white); border-radius: 12px; padding: 2.5rem; width: 360px; }
+  .login-logo { text-align: center; margin-bottom: 1.5rem; }
+  .login-logo strong { display: block; font-size: 1.1rem; color: var(--navy); }
+  .login-logo span { font-size: .78rem; color: var(--muted); }
+  .login-box .field { margin-bottom: .85rem; }
+  .login-error { background: #fef2f2; color: var(--red); padding: .6rem .85rem; border-radius: var(--radius); font-size: .8rem; margin-bottom: .85rem; display: none; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; display: none; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; }
+  .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 10; }
+  .modal-header h3 { font-size: 1rem; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--muted); padding: 0 .25rem; line-height: 1; }
+  .modal-body { padding: 1.5rem; }
+  .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: .75rem; background: var(--white); position: sticky; bottom: 0; }
+
+  /* ── STAT PILLS ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .stat-pill { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow); }
+  .stat-pill .val { font-size: 1.3rem; font-weight: 700; color: var(--navy); }
+  .stat-pill .lbl { font-size: .72rem; color: var(--muted); margin-top: .15rem; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+  /* ── COLOR BADGE ── */
+  .color-badge { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .3rem; vertical-align: middle; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #main { margin-left: 0; }
+    .form-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <strong>MUK Financial</strong>
+      <span>Content Management System</span>
+    </div>
+    <div id="login-error" class="login-error"></div>
+    <div class="field"><label>Username</label><input id="l-user" type="text" value="admin" autocomplete="username"/></div>
+    <div class="field"><label>Password</label><input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:.65rem" onclick="doLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <strong>MUK Admin</strong>
+    <span>Content Management</span>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-label">Overview</div>
+      <a class="nav-item active" data-panel="dashboard" onclick="showPanel('dashboard')"><span class="nav-icon">📊</span> Dashboard</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Site Content</div>
+      <a class="nav-item" data-panel="site" onclick="showPanel('site')"><span class="nav-icon">⚙️</span> Site Settings</a>
+      <a class="nav-item" data-panel="hero" onclick="showPanel('hero')"><span class="nav-icon">🏠</span> Hero Section</a>
+      <a class="nav-item" data-panel="services" onclick="showPanel('services')"><span class="nav-icon">💼</span> Six Pillars</a>
+      <a class="nav-item" data-panel="industries" onclick="showPanel('industries')"><span class="nav-icon">🏗️</span> Industries</a>
+      <a class="nav-item" data-panel="cases" onclick="showPanel('cases')"><span class="nav-icon">📁</span> Case Studies</a>
+      <a class="nav-item" data-panel="pricing" onclick="showPanel('pricing')"><span class="nav-icon">💰</span> Pricing</a>
+      <a class="nav-item" data-panel="process" onclick="showPanel('process')"><span class="nav-icon">📋</span> Process Steps</a>
+      <a class="nav-item" data-panel="tech" onclick="showPanel('tech')"><span class="nav-icon">🛠️</span> Tech Stack</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Media</div>
+      <a class="nav-item" data-panel="media" onclick="showPanel('media')"><span class="nav-icon">🖼️</span> Image Library</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Account</div>
+      <a class="nav-item" data-panel="password" onclick="showPanel('password')"><span class="nav-icon">🔑</span> Change Password</a>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <h1 id="topbar-title">Dashboard</h1>
+    <div class="topbar-right">
+      <span class="status-dot"></span><span class="status-text">Server online</span>
+      <a href="/" target="_blank" class="view-site">↗ View Site</a>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div id="panel-dashboard" class="panel active">
+      <p class="panel-desc">Welcome to the MUK Financial CMS. Select a section from the sidebar to edit content.</p>
+      <div class="stat-grid" id="dash-stats"></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Quick Actions</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem">
+          <button class="btn btn-secondary" onclick="showPanel('hero')">✏️ Edit Hero</button>
+          <button class="btn btn-secondary" onclick="showPanel('services')">✏️ Edit Services</button>
+          <button class="btn btn-secondary" onclick="showPanel('cases')">✏️ Edit Case Studies</button>
+          <button class="btn btn-secondary" onclick="showPanel('pricing')">✏️ Edit Pricing</button>
+          <button class="btn btn-secondary" onclick="showPanel('media')">🖼️ Upload Images</button>
+          <a href="/" target="_blank" class="btn btn-primary">↗ View Live Site</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SITE SETTINGS ═══ -->
+    <div id="panel-site" class="panel">
+      <p class="panel-title">Site Settings</p>
+      <p class="panel-desc">Global site information — company name, contact details, and integrations.</p>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Company Info</span><button class="btn btn-primary btn-sm" onclick="saveSite()">Save Changes</button></div>
+        <div class="form-grid">
+          <div class="field"><label>Company Name</label><input id="s-name" type="text"/></div>
+          <div class="field"><label>Tagline</label><input id="s-tagline" type="text"/></div>
+          <div class="field"><label>Business Email</label><input id="s-email" type="email"/></div>
+          <div class="field"><label>Phone (optional)</label><input id="s-phone" type="tel"/></div>
+          <div class="field form-full"><label>LinkedIn URL</label><input id="s-linkedin" type="url"/></div>
+          <div class="field form-full"><label>Formspree Form ID <span class="hint">(Get yours free at formspree.io)</span></label><input id="s-formspree" type="text" placeholder="YOUR_FORM_ID"/></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ HERO ═══ -->
+    <div id="panel-hero" class="panel">
+      <p class="panel-title">Hero Section</p>
+      <p class="panel-desc">The first thing visitors see. Make it count.</p>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Hero Copy</span><button class="btn btn-primary btn-sm" onclick="saveHero()">Save Changes</button></div>
+        <div class="form-grid">
+          <div class="field form-full"><label>Eyebrow Label</label><input id="h-eyebrow" type="text"/></div>
+          <div class="field form-full"><label>Main Headline</label><input id="h-headline" type="text"/></div>
+          <div class="field form-full"><label>Sub-headline</label><textarea id="h-sub" rows="2"></textarea></div>
+          <div class="field"><label>Primary CTA Button</label><input id="h-cta1" type="text"/></div>
+          <div class="field"><label>Secondary CTA Button</label><input id="h-cta2" type="text"/></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-title" style="margin-bottom:.75rem">Hero Stats (4 items)</div>
+        <div id="hero-stats-editor"></div>
+      </div>
+    </div>
+
+    <!-- ═══ SERVICES ═══ -->
+    <div id="panel-services" class="panel">
+      <p class="panel-title">Six Pillars of Financial Operations</p>
+      <p class="panel-desc">Edit each service card — title, description, and tags.</p>
+      <div class="item-list" id="services-list"></div>
+    </div>
+
+    <!-- ═══ INDUSTRIES ═══ -->
+    <div id="panel-industries" class="panel">
+      <p class="panel-title">Industries We Serve</p>
+      <p class="panel-desc">Add, edit, or remove industry cards.</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+        <button class="btn btn-primary btn-sm" onclick="openAddIndustry()">+ Add Industry</button>
+      </div>
+      <div class="item-list" id="industries-list"></div>
+    </div>
+
+    <!-- ═══ CASE STUDIES ═══ -->
+    <div id="panel-cases" class="panel">
+      <p class="panel-title">Case Studies</p>
+      <p class="panel-desc">Edit client success stories, stats, and images.</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+        <button class="btn btn-primary btn-sm" onclick="openAddCase()">+ Add Case Study</button>
+      </div>
+      <div class="item-list" id="cases-list"></div>
+    </div>
+
+    <!-- ═══ PRICING ═══ -->
+    <div id="panel-pricing" class="panel">
+      <p class="panel-title">Pricing Tiers</p>
+      <p class="panel-desc">Edit your three pricing plans. Features are entered one per line.</p>
+      <div class="item-list" id="pricing-list"></div>
+    </div>
+
+    <!-- ═══ PROCESS ═══ -->
+    <div id="panel-process" class="panel">
+      <p class="panel-title">Engagement Process</p>
+      <p class="panel-desc">The 4-step process shown on the site.</p>
+      <div class="item-list" id="process-list"></div>
+    </div>
+
+    <!-- ═══ TECH STACK ═══ -->
+    <div id="panel-tech" class="panel">
+      <p class="panel-title">Technology Stack</p>
+      <p class="panel-desc">Tools and platforms listed in the Technology Integration section.</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+        <button class="btn btn-primary btn-sm" onclick="openAddTech()">+ Add Tool</button>
+      </div>
+      <div class="item-list" id="tech-list"></div>
+    </div>
+
+    <!-- ═══ MEDIA LIBRARY ═══ -->
+    <div id="panel-media" class="panel">
+      <p class="panel-title">Image Library</p>
+      <p class="panel-desc">Upload and manage images for case studies and hero backgrounds. Max 5MB per image.</p>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Upload New Image</span></div>
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="e=>e.preventDefault()" ondrop="handleDrop(event)">
+          <div class="icon">📁</div>
+          <strong style="font-size:.9rem">Click to upload or drag & drop</strong>
+          <p>JPG, PNG, WebP, SVG — max 5MB</p>
+          <img id="upload-preview" class="upload-preview" style="display:none"/>
+        </div>
+        <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
+        <div style="margin-top:1rem;display:flex;gap:.75rem">
+          <button class="btn btn-primary" id="upload-btn" onclick="uploadImage()" disabled>Upload Image</button>
+          <button class="btn btn-secondary" onclick="clearUpload()">Clear</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <div class="card-header"><span class="card-title">Uploaded Images</span><button class="btn btn-secondary btn-sm" onclick="loadGallery()">↻ Refresh</button></div>
+        <div class="image-gallery" id="image-gallery"><p style="color:var(--muted);font-size:.84rem">Loading…</p></div>
+      </div>
+    </div>
+
+    <!-- ═══ CHANGE PASSWORD ═══ -->
+    <div id="panel-password" class="panel">
+      <p class="panel-title">Change Password</p>
+      <p class="panel-desc">Update your admin login password.</p>
+      <div class="card" style="max-width:420px">
+        <div class="field"><label>Current Password</label><input id="pw-current" type="password"/></div>
+        <div class="field" style="margin-top:.85rem"><label>New Password</label><input id="pw-new" type="password" placeholder="Min 8 characters"/></div>
+        <div class="field" style="margin-top:.85rem"><label>Confirm New Password</label><input id="pw-confirm" type="password"/></div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="changePassword()">Update Password</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Edit</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="modal-save" onclick="modalSave()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let content = {};
+let modalCallback = null;
+let uploadFile = null;
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+async function init() {
+  const ok = await fetch('/api/auth/check').then(r=>r.ok).catch(()=>false);
+  if (ok) { hideLogin(); await loadContent(); }
+  // If not ok, login overlay stays visible
+  document.getElementById('l-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+}
+
+function hideLogin() { document.getElementById('login-overlay').style.display = 'none'; }
+
+// ═══════════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════════
+async function doLogin() {
+  const user = document.getElementById('l-user').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  const err  = document.getElementById('login-error');
+  const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username:user, password:pass}) });
+  if (r.ok) { hideLogin(); await loadContent(); }
+  else { err.style.display='block'; err.textContent='Invalid username or password.'; }
+}
+
+async function doLogout() {
+  await fetch('/api/auth/logout', { method:'POST' });
+  location.reload();
+}
+
+async function changePassword() {
+  const current = document.getElementById('pw-current').value;
+  const np = document.getElementById('pw-new').value;
+  const nc = document.getElementById('pw-confirm').value;
+  if (np !== nc) return toast('Passwords do not match', 'error');
+  if (np.length < 8) return toast('Minimum 8 characters required', 'error');
+  const r = await fetch('/api/auth/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({current, newPassword: np}) });
+  if (r.ok) { toast('Password updated successfully', 'success'); document.getElementById('pw-current').value=''; document.getElementById('pw-new').value=''; document.getElementById('pw-confirm').value=''; }
+  else { const d = await r.json(); toast(d.error || 'Failed to update password', 'error'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONTENT LOAD
+// ═══════════════════════════════════════════════════════════════
+async function loadContent() {
+  content = await fetch('/api/content').then(r=>r.json());
+  renderDashboard();
+  renderSite();
+  renderHero();
+  renderServices();
+  renderIndustries();
+  renderCases();
+  renderPricing();
+  renderProcess();
+  renderTech();
+  loadGallery();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL NAV
+// ═══════════════════════════════════════════════════════════════
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelector(`[data-panel="${name}"]`)?.classList.add('active');
+  document.getElementById('topbar-title').textContent = {
+    dashboard:'Dashboard', site:'Site Settings', hero:'Hero Section', services:'Six Pillars',
+    industries:'Industries', cases:'Case Studies', pricing:'Pricing', process:'Process Steps',
+    tech:'Tech Stack', media:'Image Library', password:'Change Password'
+  }[name] || name;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function renderDashboard() {
+  const c = content;
+  const stats = [
+    { val: c.services?.length || 0,   lbl: 'Services' },
+    { val: c.cases?.length || 0,      lbl: 'Case Studies' },
+    { val: c.industries?.length || 0, lbl: 'Industries' },
+    { val: c.pricing?.length || 0,    lbl: 'Pricing Tiers' },
+  ];
+  document.getElementById('dash-stats').innerHTML = stats.map(s =>
+    `<div class="stat-pill"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SITE SETTINGS
+// ═══════════════════════════════════════════════════════════════
+function renderSite() {
+  const s = content.site || {};
+  document.getElementById('s-name').value     = s.name || '';
+  document.getElementById('s-tagline').value  = s.tagline || '';
+  document.getElementById('s-email').value    = s.email || '';
+  document.getElementById('s-phone').value    = s.phone || '';
+  document.getElementById('s-linkedin').value = s.linkedin || '';
+  document.getElementById('s-formspree').value= s.formspree_id || '';
+}
+async function saveSite() {
+  const data = { name: v('s-name'), tagline: v('s-tagline'), email: v('s-email'), phone: v('s-phone'), linkedin: v('s-linkedin'), formspree_id: v('s-formspree') };
+  await patch('site', data);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HERO
+// ═══════════════════════════════════════════════════════════════
+function renderHero() {
+  const h = content.hero || {};
+  document.getElementById('h-eyebrow').value  = h.eyebrow || '';
+  document.getElementById('h-headline').value = h.headline || '';
+  document.getElementById('h-sub').value      = h.subheadline || '';
+  document.getElementById('h-cta1').value     = h.cta_primary || '';
+  document.getElementById('h-cta2').value     = h.cta_secondary || '';
+  const stats = h.stats || [];
+  document.getElementById('hero-stats-editor').innerHTML = stats.map((s,i) => `
+    <div class="form-grid cols-3" style="margin-bottom:.75rem;align-items:end">
+      <div class="field"><label>Value ${i+1}</label><input id="hs-val-${i}" type="text" value="${esc(s.value)}"/></div>
+      <div class="field"><label>Label ${i+1}</label><input id="hs-lbl-${i}" type="text" value="${esc(s.label)}"/></div>
+      <div></div>
+    </div>
+  `).join('');
+}
+async function saveHero() {
+  const stats = (content.hero.stats || []).map((_,i) => ({ value: v(`hs-val-${i}`), label: v(`hs-lbl-${i}`) }));
+  const data = { eyebrow: v('h-eyebrow'), headline: v('h-headline'), subheadline: v('h-sub'), cta_primary: v('h-cta1'), cta_secondary: v('h-cta2'), stats };
+  await patch('hero', data);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SERVICES
+// ═══════════════════════════════════════════════════════════════
+const SERVICE_COLORS = { teal:'#0d9488', gold:'#c9953a', blue:'#2563eb', purple:'#7c3aed', red:'#dc2626', pink:'#a21caf' };
+function renderServices() {
+  const list = content.services || [];
+  document.getElementById('services-list').innerHTML = list.map(s => `
+    <div class="item-row">
+      <span class="item-badge" style="background:${SERVICE_COLORS[s.color]}20;color:${SERVICE_COLORS[s.color]}">${s.num}</span>
+      <div class="item-body">
+        <strong>${esc(s.title)}</strong>
+        <p>${esc(s.description)}</p>
+        <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.3rem">${(s.tags||[]).map(t=>`<span style="background:#f1f5f9;border:1px solid #e2e8f0;padding:.15rem .45rem;border-radius:4px;font-size:.72rem">${esc(t)}</span>`).join('')}</div>
+      </div>
+      <div class="item-controls"><button class="btn btn-secondary btn-sm" onclick="editService(${s.id})">✏️ Edit</button></div>
+    </div>`).join('');
+}
+function editService(id) {
+  const s = content.services.find(x => x.id === id);
+  openModal(`Edit Service #${s.num}`, `
+    <div class="form-grid">
+      <div class="field form-full"><label>Title</label><input id="m-title" type="text" value="${esc(s.title)}"/></div>
+      <div class="field form-full"><label>Description</label><textarea id="m-desc" rows="3">${esc(s.description)}</textarea></div>
+      <div class="field form-full">
+        <label>Color Theme</label>
+        <select id="m-color">${Object.keys(SERVICE_COLORS).map(c=>`<option value="${c}" ${c===s.color?'selected':''}>${c}</option>`).join('')}</select>
+      </div>
+      <div class="field form-full"><label>Tags</label><div id="m-tags-wrap"></div></div>
+    </div>`, async () => {
+    const data = { title: v('m-title'), description: v('m-desc'), color: v('m-color'), tags: getTags() };
+    await patchItem('services', id, data);
+    renderServices();
+  });
+  setTimeout(() => initTags(s.tags || []), 10);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INDUSTRIES
+// ═══════════════════════════════════════════════════════════════
+function renderIndustries() {
+  const list = content.industries || [];
+  document.getElementById('industries-list').innerHTML = list.map(i => `
+    <div class="item-row">
+      <span style="font-size:1.4rem">${i.icon}</span>
+      <div class="item-body"><strong>${esc(i.name)}</strong></div>
+      <div class="item-controls">
+        <button class="btn btn-secondary btn-sm" onclick="editIndustry(${i.id})">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('industries',${i.id},'industry','renderIndustries')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function openAddIndustry() { editIndustry(null); }
+function editIndustry(id) {
+  const i = id ? content.industries.find(x => x.id === id) : { icon:'🏢', name:'' };
+  openModal(id ? 'Edit Industry' : 'Add Industry', `
+    <div class="form-grid">
+      <div class="field"><label>Icon (emoji)</label><input id="m-icon" type="text" value="${esc(i.icon)}" style="font-size:1.4rem"/></div>
+      <div class="field"><label>Industry Name</label><input id="m-name" type="text" value="${esc(i.name)}"/></div>
+    </div>`, async () => {
+    const data = { icon: v('m-icon'), name: v('m-name') };
+    if (id) await patchItem('industries', id, data);
+    else await postItem('industries', data);
+    renderIndustries();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CASE STUDIES
+// ═══════════════════════════════════════════════════════════════
+const TAG_COLORS = { teal:'#0d9488', gold:'#c9953a', purple:'#7c3aed' };
+function renderCases() {
+  const list = content.cases || [];
+  document.getElementById('cases-list').innerHTML = list.map(c => `
+    <div class="item-row">
+      <div class="item-body">
+        <div style="margin-bottom:.35rem"><span style="background:${TAG_COLORS[c.tag_color]||'#888'}20;color:${TAG_COLORS[c.tag_color]||'#888'};font-size:.68rem;font-weight:700;padding:.2rem .5rem;border-radius:4px">${esc(c.tag)}</span></div>
+        <strong>${esc(c.title)}</strong>
+        <p>${esc(c.body?.substring(0,120))}…</p>
+        <div style="margin-top:.5rem;font-size:.78rem;color:var(--muted)">${esc(c.stat1_value)} · ${esc(c.stat1_label)} &nbsp;|&nbsp; ${esc(c.stat2_value)} · ${esc(c.stat2_label)}</div>
+        ${c.image ? `<img src="${c.image}" style="height:48px;width:80px;object-fit:cover;border-radius:4px;margin-top:.5rem"/>` : ''}
+      </div>
+      <div class="item-controls">
+        <button class="btn btn-secondary btn-sm" onclick="editCase(${c.id})">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('cases',${c.id},'case study','renderCases')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function openAddCase() { editCase(null); }
+function editCase(id) {
+  const c = id ? content.cases.find(x => x.id === id) : { tag:'', tag_color:'teal', title:'', body:'', stat1_value:'', stat1_label:'', stat2_value:'', stat2_label:'', image:'' };
+  openModal(id ? 'Edit Case Study' : 'Add Case Study', `
+    <div class="form-grid">
+      <div class="field"><label>Tag Label</label><input id="m-tag" type="text" value="${esc(c.tag)}"/></div>
+      <div class="field"><label>Tag Color</label><select id="m-tagcolor">${Object.keys(TAG_COLORS).map(k=>`<option value="${k}" ${k===c.tag_color?'selected':''}>${k}</option>`).join('')}</select></div>
+      <div class="field form-full"><label>Title / Quote</label><input id="m-title" type="text" value="${esc(c.title)}"/></div>
+      <div class="field form-full"><label>Body</label><textarea id="m-body" rows="4">${esc(c.body)}</textarea></div>
+      <div class="field"><label>Stat 1 Value</label><input id="m-s1v" type="text" value="${esc(c.stat1_value)}"/></div>
+      <div class="field"><label>Stat 1 Label</label><input id="m-s1l" type="text" value="${esc(c.stat1_label)}"/></div>
+      <div class="field"><label>Stat 2 Value</label><input id="m-s2v" type="text" value="${esc(c.stat2_value)}"/></div>
+      <div class="field"><label>Stat 2 Label</label><input id="m-s2l" type="text" value="${esc(c.stat2_label)}"/></div>
+      <div class="field form-full"><label>Image URL <span class="hint">Upload in Image Library then paste URL here</span></label><input id="m-img" type="text" value="${esc(c.image||'')}"/>${c.image?`<img src="${c.image}" style="height:80px;object-fit:cover;border-radius:6px;margin-top:.5rem"/>`:''}</div>
+    </div>`, async () => {
+    const data = { tag:v('m-tag'), tag_color:v('m-tagcolor'), title:v('m-title'), body:v('m-body'), stat1_value:v('m-s1v'), stat1_label:v('m-s1l'), stat2_value:v('m-s2v'), stat2_label:v('m-s2l'), image:v('m-img') };
+    if (id) await patchItem('cases', id, data);
+    else await postItem('cases', data);
+    renderCases();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PRICING
+// ═══════════════════════════════════════════════════════════════
+function renderPricing() {
+  const list = content.pricing || [];
+  document.getElementById('pricing-list').innerHTML = list.map(p => `
+    <div class="item-row" style="${p.featured?'border-left:3px solid var(--gold)':''}">
+      <div class="item-body">
+        <strong>${esc(p.name)} — ${esc(p.price)}${esc(p.period)} ${p.featured?'<span style="background:#fef9ee;color:var(--gold);font-size:.7rem;padding:.15rem .45rem;border-radius:4px;margin-left:.4rem">Featured</span>':''}</strong>
+        <p>${esc(p.description)}</p>
+        <div style="margin-top:.4rem;font-size:.75rem;color:var(--muted)">${(p.features||[]).length} features listed</div>
+      </div>
+      <div class="item-controls"><button class="btn btn-secondary btn-sm" onclick="editPricing(${p.id})">✏️ Edit</button></div>
+    </div>`).join('');
+}
+function editPricing(id) {
+  const p = content.pricing.find(x => x.id === id);
+  openModal(`Edit ${p.name} Plan`, `
+    <div class="form-grid">
+      <div class="field"><label>Plan Name</label><input id="m-name" type="text" value="${esc(p.name)}"/></div>
+      <div class="field"><label>Price</label><input id="m-price" type="text" value="${esc(p.price)}"/></div>
+      <div class="field"><label>Period (e.g. /mo)</label><input id="m-period" type="text" value="${esc(p.period)}"/></div>
+      <div class="field"><label>Featured?</label><select id="m-featured"><option value="false" ${!p.featured?'selected':''}>No</option><option value="true" ${p.featured?'selected':''}>Yes</option></select></div>
+      <div class="field form-full"><label>Description</label><textarea id="m-desc" rows="2">${esc(p.description)}</textarea></div>
+      <div class="field form-full"><label>Features <span class="hint">One feature per line</span></label><textarea id="m-feats" rows="8">${(p.features||[]).join('\n')}</textarea></div>
+      <div class="field form-full"><label>CTA Button Text</label><input id="m-cta" type="text" value="${esc(p.cta)}"/></div>
+    </div>`, async () => {
+    const data = { name:v('m-name'), price:v('m-price'), period:v('m-period'), featured:v('m-featured')==='true', description:v('m-desc'), features:v('m-feats').split('\n').map(f=>f.trim()).filter(Boolean), cta:v('m-cta') };
+    await patchItem('pricing', id, data);
+    renderPricing();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROCESS
+// ═══════════════════════════════════════════════════════════════
+function renderProcess() {
+  const list = content.process || [];
+  document.getElementById('process-list').innerHTML = list.map(p => `
+    <div class="item-row">
+      <span class="item-badge">${esc(p.step)}</span>
+      <div class="item-body"><strong>${esc(p.title)}</strong><p>${esc(p.description)}</p></div>
+      <div class="item-controls"><button class="btn btn-secondary btn-sm" onclick="editProcess(${p.id})">✏️ Edit</button></div>
+    </div>`).join('');
+}
+function editProcess(id) {
+  const p = content.process.find(x => x.id === id);
+  openModal(`Edit Step: ${p.step}`, `
+    <div class="form-grid">
+      <div class="field"><label>Step Label (e.g. "Day 1")</label><input id="m-step" type="text" value="${esc(p.step)}"/></div>
+      <div class="field"><label>Title</label><input id="m-title" type="text" value="${esc(p.title)}"/></div>
+      <div class="field form-full"><label>Description</label><textarea id="m-desc" rows="3">${esc(p.description)}</textarea></div>
+    </div>`, async () => {
+    await patchItem('process', id, { step:v('m-step'), title:v('m-title'), description:v('m-desc') });
+    renderProcess();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TECH STACK
+// ═══════════════════════════════════════════════════════════════
+function renderTech() {
+  const list = content.tech || [];
+  document.getElementById('tech-list').innerHTML = list.map(t => `
+    <div class="item-row">
+      <span class="color-badge" style="background:${t.color};width:14px;height:14px;border-radius:50%;display:inline-block;flex-shrink:0"></span>
+      <div class="item-body"><strong>${esc(t.name)}</strong></div>
+      <div class="item-controls">
+        <button class="btn btn-secondary btn-sm" onclick="editTech(${t.id})">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('tech',${t.id},'tool','renderTech')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function openAddTech() { editTech(null); }
+function editTech(id) {
+  const t = id ? content.tech.find(x => x.id === id) : { name:'', color:'#000000' };
+  openModal(id ? 'Edit Tool' : 'Add Tool', `
+    <div class="form-grid">
+      <div class="field"><label>Tool Name</label><input id="m-name" type="text" value="${esc(t.name)}"/></div>
+      <div class="field"><label>Brand Color</label><input id="m-color" type="color" value="${esc(t.color)}" style="height:42px;cursor:pointer"/></div>
+    </div>`, async () => {
+    const data = { name:v('m-name'), color:v('m-color') };
+    if (id) await patchItem('tech', id, data);
+    else await postItem('tech', data);
+    renderTech();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// IMAGE UPLOAD
+// ═══════════════════════════════════════════════════════════════
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) setUploadFile(file);
+}
+function handleFileSelect(e) { if (e.target.files[0]) setUploadFile(e.target.files[0]); }
+function setUploadFile(file) {
+  uploadFile = file;
+  const preview = document.getElementById('upload-preview');
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  document.getElementById('upload-btn').disabled = false;
+}
+function clearUpload() {
+  uploadFile = null;
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-btn').disabled = true;
+  document.getElementById('file-input').value = '';
+}
+async function uploadImage() {
+  if (!uploadFile) return;
+  const btn = document.getElementById('upload-btn');
+  btn.disabled = true; btn.textContent = 'Uploading…';
+  const fd = new FormData();
+  fd.append('image', uploadFile);
+  const r = await fetch('/api/upload', { method:'POST', body: fd });
+  if (r.ok) {
+    const d = await r.json();
+    toast(`Uploaded: ${d.filename}`, 'success');
+    clearUpload();
+    loadGallery();
+  } else { toast('Upload failed', 'error'); }
+  btn.disabled = false; btn.textContent = 'Upload Image';
+}
+async function loadGallery() {
+  const imgs = await fetch('/api/uploads').then(r=>r.json()).catch(()=>[]);
+  const el = document.getElementById('image-gallery');
+  if (!imgs.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.84rem">No images uploaded yet.</p>'; return; }
+  el.innerHTML = imgs.map(img => `
+    <div class="gallery-item">
+      <img src="${img.url}" alt="${img.filename}" loading="lazy"/>
+      <div class="gal-actions">
+        <button class="btn btn-secondary btn-sm" onclick="copyUrl('${img.url}')">Copy URL</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteImage('${img.filename}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function copyUrl(url) {
+  navigator.clipboard.writeText(window.location.origin + url);
+  toast('URL copied to clipboard', 'success');
+}
+async function deleteImage(filename) {
+  if (!confirm(`Delete ${filename}?`)) return;
+  const r = await fetch(`/api/uploads/${filename}`, { method:'DELETE' });
+  if (r.ok) { toast('Image deleted', 'success'); loadGallery(); }
+  else toast('Delete failed', 'error');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TAG EDITOR (for services)
+// ═══════════════════════════════════════════════════════════════
+let currentTags = [];
+function initTags(tags) {
+  currentTags = [...tags];
+  renderTags();
+  const wrap = document.getElementById('m-tags-wrap');
+  if (!wrap) return;
+  const addRow = document.createElement('div');
+  addRow.className = 'tag-add-row';
+  addRow.innerHTML = `<input type="text" id="tag-input" placeholder="Add tag…"/><button class="btn btn-secondary btn-sm" onclick="addTag()">Add</button>`;
+  wrap.appendChild(addRow);
+  document.getElementById('tag-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } });
+}
+function renderTags() {
+  let wrap = document.getElementById('m-tags-wrap');
+  if (!wrap) return;
+  const addRow = wrap.querySelector('.tag-add-row');
+  const pillsHtml = `<div class="tags-wrap" id="tags-pills">${currentTags.map((t,i)=>`<span class="tag-pill">${esc(t)}<span class="rm" onclick="removeTag(${i})">×</span></span>`).join('')}</div>`;
+  if (addRow) { wrap.innerHTML = pillsHtml; wrap.appendChild(addRow); }
+  else { wrap.innerHTML = pillsHtml; }
+}
+function addTag() {
+  const inp = document.getElementById('tag-input');
+  const val = inp?.value.trim();
+  if (val && !currentTags.includes(val)) { currentTags.push(val); renderTags(); }
+  if (inp) inp.value = '';
+}
+function removeTag(i) { currentTags.splice(i, 1); renderTags(); }
+function getTags() { return [...currentTags]; }
+
+// ═══════════════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════════════
+function openModal(title, bodyHtml, onSave) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('modal-overlay').classList.add('open');
+  modalCallback = onSave;
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); modalCallback = null; }
+async function modalSave() {
+  const btn = document.getElementById('modal-save');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try { await modalCallback(); closeModal(); }
+  catch(e) { toast('Save failed: ' + e.message, 'error'); }
+  btn.disabled = false; btn.textContent = 'Save Changes';
+}
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('modal-overlay')) closeModal(); });
+
+// ═══════════════════════════════════════════════════════════════
+// API HELPERS
+// ═══════════════════════════════════════════════════════════════
+async function patch(section, data) {
+  const r = await fetch(`/api/content/${section}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+  if (r.ok) {
+    content[section] = Array.isArray(content[section]) ? data : { ...content[section], ...data };
+    toast('Saved — changes are live on your site', 'success');
+  } else toast('Save failed', 'error');
+}
+async function patchItem(section, id, data) {
+  const r = await fetch(`/api/content/${section}/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+  if (r.ok) {
+    const d = await r.json();
+    const idx = content[section].findIndex(x=>x.id===id);
+    if (idx>=0) content[section][idx]={...content[section][idx],...d.data};
+    toast('Saved — changes are live on your site', 'success');
+  } else toast('Save failed', 'error');
+}
+async function postItem(section, data) {
+  const r = await fetch(`/api/content/${section}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+  if (r.ok) {
+    const d = await r.json();
+    content[section].push(d.data);
+    toast('Added — visible on your site now', 'success');
+  } else toast('Add failed', 'error');
+}
+async function deleteItem(section, id, label, renderFn) {
+  if (!confirm(`Delete this ${label}? This cannot be undone.`)) return;
+  const r = await fetch(`/api/content/${section}/${id}`, { method:'DELETE' });
+  if (r.ok) {
+    content[section] = content[section].filter(x=>x.id!==id);
+    toast('Deleted — removed from site', 'success');
+    window[renderFn]();
+  } else toast('Delete failed','error');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTIL
+// ═══════════════════════════════════════════════════════════════
+function v(id) { const el=document.getElementById(id); return el?el.value:''; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg, type='success') {
+  const el=document.createElement('div');
+  el.className=`toast-msg ${type}`;
+  el.textContent = type==='success'?'✓ '+msg:'✕ '+msg;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(()=>el.remove(),3500);
+}
+
+init();
+</script>
+</body>
+</html>
