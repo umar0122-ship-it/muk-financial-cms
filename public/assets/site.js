@@ -50,7 +50,7 @@
         <nav class="nav" aria-label="Main">
           <div class="nav-inner">
             <a class="brand" href="/">
-              <span class="brand-mark">M</span>
+              <img class="brand-mark" src="/assets/logo.svg" alt=""/>
               <span>
                 <span class="brand-name">${esc(site.name || 'MUK Financial')}</span><br>
                 <span class="brand-sub">${esc(site.tagline || '')}</span>
@@ -85,7 +85,7 @@
         <div class="footer-top">
           <div class="f-about">
             <a class="brand" href="/">
-              <span class="brand-mark">M</span>
+              <img class="brand-mark" src="/assets/logo.svg" alt=""/>
               <span>
                 <span class="brand-name" style="color:#fff">${esc(site.name || 'MUK Financial')}</span><br>
                 <span class="brand-sub">${esc(site.tagline || '')}</span>
@@ -106,7 +106,7 @@
           <div>
             <h5>Services</h5>
             <ul>
-              ${(c.services || []).slice(0, 6).map(s => `<li><a href="/services#svc-${s.id}">${esc(s.title)}</a></li>`).join('')}
+              ${(c.services || []).map(s => `<li><a href="/services#svc-${s.id}">${esc(s.title)}</a></li>`).join('')}
             </ul>
           </div>
           <div>
@@ -198,7 +198,7 @@
       // Stat band: firm credentials from hero stats
       fill('stat-band', (h.stats || []).map(s => `<div class="stat"><b data-count>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join(''));
 
-      fill('home-services', (c.services || []).slice(0, 6).map(s => serviceCard(s, true)).join(''));
+      fill('home-services', (c.services || []).map(s => serviceCard(s, true)).join(''));
       fill('home-industries', (c.industries || []).slice(0, 8).map(i => `
         <a class="ind-tile reveal" href="/industries"><span class="ico">${esc(i.icon)}</span><b>${esc(i.name)}</b></a>`).join(''));
       fill('home-case', (c.cases || []).slice(0, 1).map(caseCard).join(''));

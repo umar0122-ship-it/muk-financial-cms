@@ -190,7 +190,7 @@
       <div class="nav-label">Site Content</div>
       <a class="nav-item" data-panel="site" onclick="showPanel('site')"><span class="nav-icon">⚙️</span> Site Settings</a>
       <a class="nav-item" data-panel="hero" onclick="showPanel('hero')"><span class="nav-icon">🏠</span> Hero Section</a>
-      <a class="nav-item" data-panel="services" onclick="showPanel('services')"><span class="nav-icon">💼</span> Six Pillars</a>
+      <a class="nav-item" data-panel="services" onclick="showPanel('services')"><span class="nav-icon">💼</span> Services</a>
       <a class="nav-item" data-panel="industries" onclick="showPanel('industries')"><span class="nav-icon">🏗️</span> Industries</a>
       <a class="nav-item" data-panel="cases" onclick="showPanel('cases')"><span class="nav-icon">📁</span> Case Studies</a>
       <a class="nav-item" data-panel="pricing" onclick="showPanel('pricing')"><span class="nav-icon">💰</span> Pricing</a>
@@ -279,8 +279,11 @@
 
     <!-- ═══ SERVICES ═══ -->
     <div id="panel-services" class="panel">
-      <p class="panel-title">Six Pillars of Financial Operations</p>
-      <p class="panel-desc">Edit each service card — title, description, and tags.</p>
+      <p class="panel-title">Services</p>
+      <p class="panel-desc">Edit each service card — title, description, and tags. Use ↑ ↓ to change the order shown on the website.</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+        <button class="btn btn-primary btn-sm" onclick="openAddService()">+ Add Service</button>
+      </div>
       <div class="item-list" id="services-list"></div>
     </div>
 
@@ -459,7 +462,7 @@ function showPanel(name) {
   document.getElementById('panel-' + name).classList.add('active');
   document.querySelector(`[data-panel="${name}"]`)?.classList.add('active');
   document.getElementById('topbar-title').textContent = {
-    dashboard:'Dashboard', site:'Site Settings', hero:'Hero Section', services:'Six Pillars',
+    dashboard:'Dashboard', site:'Site Settings', hero:'Hero Section', services:'Services',
     industries:'Industries', cases:'Case Studies', pricing:'Pricing', process:'Process Steps',
     tech:'Tech Stack', media:'Image Library', password:'Change Password'
   }[name] || name;
@@ -530,7 +533,7 @@ async function saveHero() {
 const SERVICE_COLORS = { teal:'#0d9488', gold:'#c9953a', blue:'#2563eb', purple:'#7c3aed', red:'#dc2626', pink:'#a21caf' };
 function renderServices() {
   const list = content.services || [];
-  document.getElementById('services-list').innerHTML = list.map(s => `
+  document.getElementById('services-list').innerHTML = list.map((s, i) => `
     <div class="item-row">
       <span class="item-badge" style="background:${SERVICE_COLORS[s.color]}20;color:${SERVICE_COLORS[s.color]}">${s.num}</span>
       <div class="item-body">
@@ -538,12 +541,31 @@ function renderServices() {
         <p>${esc(s.description)}</p>
         <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.3rem">${(s.tags||[]).map(t=>`<span style="background:#f1f5f9;border:1px solid #e2e8f0;padding:.15rem .45rem;border-radius:4px;font-size:.72rem">${esc(t)}</span>`).join('')}</div>
       </div>
-      <div class="item-controls"><button class="btn btn-secondary btn-sm" onclick="editService(${s.id})">✏️ Edit</button></div>
+      <div class="item-controls">
+        <button class="btn btn-secondary btn-sm" title="Move up" ${i===0?'disabled style="opacity:.35"':''} onclick="moveService(${s.id},-1)">↑</button>
+        <button class="btn btn-secondary btn-sm" title="Move down" ${i===list.length-1?'disabled style="opacity:.35"':''} onclick="moveService(${s.id},1)">↓</button>
+        <button class="btn btn-secondary btn-sm" onclick="editService(${s.id})">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('services',${s.id},'service','renderServices')">🗑</button>
+      </div>
     </div>`).join('');
 }
+async function moveService(id, dir) {
+  const list = content.services;
+  const i = list.findIndex(x => x.id === id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= list.length) return;
+  [list[i], list[j]] = [list[j], list[i]];
+  list.forEach((s, k) => s.num = String(k + 1).padStart(2, '0'));
+  await patch('services', list);
+  renderServices();
+}
+function openAddService() { editService(null); }
 function editService(id) {
-  const s = content.services.find(x => x.id === id);
-  openModal(`Edit Service #${s.num}`, `
+  const isNew = id == null;
+  const s = isNew
+    ? { num: String((content.services?.length || 0) + 1).padStart(2, '0'), color: 'teal', title: '', description: '', tags: [] }
+    : content.services.find(x => x.id === id);
+  openModal(isNew ? 'Add Service' : `Edit Service #${s.num}`, `
     <div class="form-grid">
       <div class="field form-full"><label>Title</label><input id="m-title" type="text" value="${esc(s.title)}"/></div>
       <div class="field form-full"><label>Description</label><textarea id="m-desc" rows="3">${esc(s.description)}</textarea></div>
@@ -554,7 +576,8 @@ function editService(id) {
       <div class="field form-full"><label>Tags</label><div id="m-tags-wrap"></div></div>
     </div>`, async () => {
     const data = { title: v('m-title'), description: v('m-desc'), color: v('m-color'), tags: getTags() };
-    await patchItem('services', id, data);
+    if (isNew) await postItem('services', { num: s.num, ...data });
+    else await patchItem('services', id, data);
     renderServices();
   });
   setTimeout(() => initTags(s.tags || []), 10);
