@@ -183,7 +183,11 @@
         <a class="btn btn-ghost" href="/services">${esc(h.cta_secondary || 'Explore Services')}</a>`;
 
       // Ledger card: recent client outcomes pulled from case studies
-      const rows = (c.cases || []).slice(0, 4).map(cs => ({ label: cs.stat1_label, value: cs.stat1_value }));
+      const rows = (c.cases || []).slice(0, 4).map(cs => {
+        const ind = (cs.tag || '').split('·')[0].trim();
+        const nice = ind ? ind.charAt(0) + ind.slice(1).toLowerCase() : '';
+        return { label: (nice ? nice + ' — ' : '') + cs.stat1_label, value: cs.stat1_value };
+      });
       fill('ledger-rows', rows.map((s, i) => `
         <div class="ledger-row">
           <span class="lr-label">${esc(s.label)}</span>
