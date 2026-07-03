@@ -249,7 +249,7 @@
       fill('contact-email', site.email ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : '<span>—</span>');
       const cal = (site.calendar_url || '').trim();
       const calHref = cal || `mailto:${site.email || ''}?subject=${encodeURIComponent('Virtual call request')}`;
-      fill('contact-calendar', `<a class="btn btn-gold" style="margin-top:.55rem;padding:11px 22px;font-size:.84rem;color:#0a1628;font-weight:700" href="${esc(calHref)}" ${cal ? 'target="_blank" rel="noopener"' : ''}>Schedule a 30-minute call <span class="arr">→</span></a>`);
+      fill('contact-calendar', `<a class="btn btn-gold" style="margin-top:.55rem;padding:11px 22px;font-size:.84rem;color:#0a1628;font-weight:700" href="${esc(calHref)}" ${cal ? 'target="_blank" rel="noopener"' : ''}>Schedule a 30-minute call <span class="arr" style="color:#0a1628;font-weight:700">→</span></a>`);
       const sel0 = document.getElementById('cf-interest');
       if (sel0) {
         const opts = ['Free consultation']
