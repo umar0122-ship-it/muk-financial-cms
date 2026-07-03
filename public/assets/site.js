@@ -248,14 +248,12 @@
       const site = c.site || {};
       fill('contact-email', site.email ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : '<span>—</span>');
       const cal = (site.calendar_url || '').trim();
-      fill('contact-calendar', cal
-        ? `<a href="${esc(cal)}" target="_blank" rel="noopener">Schedule a 30-minute call ↗</a>`
-        : `<a href="mailto:${esc(site.email || '')}?subject=${encodeURIComponent('Virtual call request')}">Email us to schedule ↗</a>`);
+      const calHref = cal || `mailto:${site.email || ''}?subject=${encodeURIComponent('Virtual call request')}`;
+      fill('contact-calendar', `<a class="btn btn-gold" style="margin-top:.55rem;padding:11px 22px;font-size:.84rem" href="${esc(calHref)}" ${cal ? 'target="_blank" rel="noopener"' : ''}>Schedule a 30-minute call <span class="arr">→</span></a>`);
       const sel0 = document.getElementById('cf-interest');
       if (sel0) {
         const opts = ['Free consultation']
           .concat((c.services || []).map(sv => sv.title))
-          .concat((c.pricing || []).map(pl => `${pl.name} plan`))
           .concat(['Something else']);
         sel0.innerHTML = opts.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
       }
