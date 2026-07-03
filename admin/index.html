@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -252,6 +252,7 @@
           <div class="field"><label>Business Email</label><input id="s-email" type="email"/></div>
           <div class="field"><label>Phone (optional)</label><input id="s-phone" type="tel"/></div>
           <div class="field form-full"><label>LinkedIn URL</label><input id="s-linkedin" type="url"/></div>
+          <div class="field form-full"><label>Booking / Calendar Link <span class="hint">(Calendly etc — shown as "Book a virtual call" on the Contact page)</span></label><input id="s-calendar" type="url" placeholder="https://calendly.com/your-name/30min"/></div>
           <div class="field form-full"><label>Formspree Form ID <span class="hint">(Get yours free at formspree.io)</span></label><input id="s-formspree" type="text" placeholder="YOUR_FORM_ID"/></div>
         </div>
       </div>
@@ -491,9 +492,10 @@ function renderSite() {
   document.getElementById('s-phone').value    = s.phone || '';
   document.getElementById('s-linkedin').value = s.linkedin || '';
   document.getElementById('s-formspree').value= s.formspree_id || '';
+  document.getElementById('s-calendar').value  = s.calendar_url || '';
 }
 async function saveSite() {
-  const data = { name: v('s-name'), tagline: v('s-tagline'), email: v('s-email'), phone: v('s-phone'), linkedin: v('s-linkedin'), formspree_id: v('s-formspree') };
+  const data = { name: v('s-name'), tagline: v('s-tagline'), email: v('s-email'), phone: v('s-phone'), linkedin: v('s-linkedin'), formspree_id: v('s-formspree'), calendar_url: v('s-calendar') };
   await patch('site', data);
 }
 

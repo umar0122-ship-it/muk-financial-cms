@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
+﻿/* ══════════════════════════════════════════════════════════════
    MUK FINANCIAL — shared site script (multi-page)
    Reads CMS content (injected by server or fetched from /api/content)
    and renders the parts of the current page marked with data hooks.
@@ -114,7 +114,7 @@
             <ul>
               ${site.email ? `<li><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></li>` : ''}
               ${site.phone ? `<li><a href="tel:${esc(site.phone)}">${esc(site.phone)}</a></li>` : ''}
-              <li><span style="font-size:.85rem">Remote · Serving all 50 US states</span></li>
+              <li><span style="font-size:.85rem">Fully remote financial operations</span></li>
             </ul>
             <a class="btn btn-gold" style="margin-top:1rem;padding:11px 20px;font-size:.82rem" href="/contact">Schedule a Call</a>
           </div>
@@ -247,7 +247,18 @@
     contact(c) {
       const site = c.site || {};
       fill('contact-email', site.email ? `<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>` : '<span>—</span>');
-      fill('contact-phone', site.phone ? `<a href="tel:${esc(site.phone)}">${esc(site.phone)}</a>` : '<span>Available after your first email</span>');
+      const cal = (site.calendar_url || '').trim();
+      fill('contact-calendar', cal
+        ? `<a href="${esc(cal)}" target="_blank" rel="noopener">Schedule a 30-minute call ↗</a>`
+        : `<a href="mailto:${esc(site.email || '')}?subject=${encodeURIComponent('Virtual call request')}">Email us to schedule ↗</a>`);
+      const sel0 = document.getElementById('cf-interest');
+      if (sel0) {
+        const opts = ['Free consultation']
+          .concat((c.services || []).map(sv => sv.title))
+          .concat((c.pricing || []).map(pl => `${pl.name} plan`))
+          .concat(['Something else']);
+        sel0.innerHTML = opts.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+      }
       fill('contact-li', site.linkedin ? `<a href="${esc(site.linkedin)}" target="_blank" rel="noopener">View profile ↗</a>` : '<span>—</span>');
 
       const form = document.getElementById('contact-form');
@@ -257,7 +268,8 @@
       const plan = new URLSearchParams(location.search).get('plan');
       const svcSel = form.querySelector('[name="interest"]');
       if (plan && svcSel) {
-        const opt = [...svcSel.options].find(o => o.value.toLowerCase() === plan.toLowerCase());
+        const want = plan.toLowerCase();
+        const opt = [...svcSel.options].find(o => o.value.toLowerCase() === want || o.value.toLowerCase() === want + ' plan');
         if (opt) opt.selected = true;
       }
 
