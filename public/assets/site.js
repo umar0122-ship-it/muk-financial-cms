@@ -50,11 +50,8 @@
         <nav class="nav" aria-label="Main">
           <div class="nav-inner">
             <a class="brand" href="/">
-              <img class="brand-mark" src="/assets/logo-mark.png" alt=""/>
-              <span>
-                <span class="brand-name">${esc(site.name || 'MUK Financial')}</span><br>
-                <span class="brand-sub">${esc(site.tagline || '')}</span>
-              </span>
+              <img class="brand-full" src="/assets/logo-full.png" alt="FinFiscalPro"/>
+              
             </a>
             <button class="nav-toggle" aria-expanded="false" aria-label="Open menu" aria-controls="nav-links">
               <span></span><span></span><span></span>
@@ -85,11 +82,8 @@
         <div class="footer-top">
           <div class="f-about">
             <a class="brand" href="/">
-              <img class="brand-mark" src="/assets/logo-mark.png" alt=""/>
-              <span>
-                <span class="brand-name" style="color:#fff">${esc(site.name || 'MUK Financial')}</span><br>
-                <span class="brand-sub">${esc(site.tagline || '')}</span>
-              </span>
+              <img class="brand-full" src="/assets/logo-full.png" alt="FinFiscalPro"/>
+              
             </a>
             <p>Institutional-grade bookkeeping, tax strategy, and financial intelligence for US small and mid-sized businesses — delivered remotely, without the overhead.</p>
             ${site.linkedin ? `<a class="btn btn-ghost" style="padding:10px 18px;font-size:.8rem" href="${esc(site.linkedin)}" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>` : ''}

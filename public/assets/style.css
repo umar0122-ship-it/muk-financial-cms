@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
+﻿/* ══════════════════════════════════════════════════════════════
    MUK FINANCIAL OPERATIONS — Global stylesheet (multi-page)
    Palette: navy ink · gold ledger · teal action · warm paper
    Type:    Fraunces (display) · Inter (body)
@@ -458,3 +458,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .topbar .tb-right { display: none; }
   .footer-top { grid-template-columns: 1fr; gap: 2rem; }
 }
+
+.brand-full { height: 52px; width: auto; display: block; border-radius: 10px; }
+@media (max-width: 620px) { .brand-full { height: 42px; } }
