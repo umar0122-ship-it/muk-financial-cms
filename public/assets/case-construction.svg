@@ -5,17 +5,18 @@
   </defs>
   <rect width="700" height="500" fill="url(#bg)"/>
   <g stroke="#ffffff" stroke-opacity="0.05"><path d="M0 100h700M0 200h700M0 300h700M0 400h700M100 0v500M200 0v500M300 0v500M400 0v500M500 0v500M600 0v500"/></g>
-  <g stroke="url(#gold)" stroke-width="7" fill="none" stroke-linecap="round">
-    <path d="M180 350 V150"/><path d="M180 150 H430"/><path d="M180 150 L130 200"/>
-    <path d="M210 180 L180 150"/><path d="M245 150 L180 215" stroke-opacity="0.6"/>
+  <g stroke="url(#gold)" stroke-width="6.5" fill="none" stroke-linecap="round">
+    <path d="M175 315 V152"/><path d="M175 152 H420"/><path d="M175 152 L132 195"/>
+    <path d="M203 180 L175 152"/><path d="M235 152 L175 212" stroke-opacity="0.6"/>
   </g>
-  <path d="M385 150 V215" stroke="#e8b84b" stroke-width="3" stroke-dasharray="6 7"/>
-  <rect x="368" y="215" width="34" height="28" rx="4" fill="#e8b84b"/>
+  <path d="M378 152 V205" stroke="#e8b84b" stroke-width="3" stroke-dasharray="6 7"/>
+  <rect x="362" y="205" width="32" height="26" rx="4" fill="#e8b84b"/>
   <g>
-    <rect x="330" y="285" width="40" height="65" rx="6" fill="#11c4a8"/>
-    <rect x="384" y="258" width="40" height="92" rx="6" fill="#11c4a8" opacity="0.85"/>
-    <rect x="438" y="305" width="40" height="45" rx="6" fill="#e06a5a"/>
-    <rect x="492" y="235" width="40" height="115" rx="6" fill="url(#gold)"/>
+    <rect x="330" y="258" width="38" height="57" rx="6" fill="#11c4a8"/>
+    <rect x="382" y="236" width="38" height="79" rx="6" fill="#11c4a8" opacity="0.85"/>
+    <rect x="434" y="276" width="38" height="39" rx="6" fill="#e06a5a"/>
+    <rect x="486" y="215" width="38" height="100" rx="6" fill="url(#gold)"/>
   </g>
-  <path d="M320 350 H545" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2.5"/>
+  <path d="M320 315 H538" stroke="#ffffff" stroke-opacity="0.4" stroke-width="2.5"/>
+  <text x="350" y="352" text-anchor="middle" font-family="Georgia, serif" fill="#e8b84b" font-size="24" opacity="0.92">Profit, project by project</text>
 </svg>
