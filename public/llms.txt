@@ -1,6 +1,6 @@
 ﻿# FinFiscalPro
 
-> FinFiscalPro provides remote financial services for US small businesses: bookkeeping, tax preparation, financial modelling, financial analysis, due diligence and quality of earnings, executive support, and LinkedIn thought leadership. Institutional-grade quality, service-based flat pricing, serving all 50 US states. Contact: info@finfiscalpro.com
+> FinFiscalPro provides remote financial services for US small businesses: bookkeeping, tax preparation, financial modelling, financial analysis, due diligence and quality of earnings, executive support, and LinkedIn thought leadership. Institutional-grade quality, service-based flat pricing, serving all 50 US states. Contact: info@finfiscalpro.com | LinkedIn: https://www.linkedin.com/company/finfiscalpro
 
 ## Core pages
 
