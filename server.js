@@ -73,10 +73,40 @@ const PAGES = {
   '/contact':      'contact.html'
 };
 
+// ─── Server-side rendering: real content in HTML for crawlers and AI models ───
+const escH = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function ssrFill(html, c) {
+  const svcCard = (s, linked) => linked
+    ? `<a class="card reveal" href="/services#svc-${s.id}"><span class="svc-num">${escH(s.num||'')}</span><h3>${escH(s.title)}</h3><p>${escH(s.description)}</p><div class="tags">${(s.tags||[]).map(t=>`<span class="tag">${escH(t)}</span>`).join('')}</div><span class="more">Learn more <span class="arr">→</span></span></a>`
+    : `<article class="card reveal" id="svc-${s.id}"><span class="svc-num">${escH(s.num||'')}</span><h3>${escH(s.title)}</h3><p>${escH(s.description)}</p><div class="tags">${(s.tags||[]).map(t=>`<span class="tag">${escH(t)}</span>`).join('')}</div></article>`;
+  const planCard = p => `<article class="plan reveal ${p.featured?'featured':''}">${p.featured?'<span class="flag">Most popular</span>':''}<h3>${escH(p.name)}</h3><div class="price">${escH(p.price)}<small>${escH(p.period||'')}</small></div><p class="p-desc">${escH(p.description)}</p><ul>${(p.features||[]).map(f=>`<li>${escH(f)}</li>`).join('')}</ul><a class="btn ${p.featured?'btn-gold':'btn-outline'} btn-block" href="/contact?plan=${encodeURIComponent(p.name||'')}">${escH(p.cta||'Get started')}</a></article>`;
+  const stepEl = p => `<div class="tl-step reveal"><span class="dot"></span><span class="tl-when">${escH(p.step)}</span><h4>${escH(p.title)}</h4><p>${escH(p.description)}</p></div>`;
+  const caseEl = cs => `<article class="case reveal"><div class="c-media ${cs.image?'has-img':''}" ${cs.image?`style="background-image:url('${escH(cs.image)}')"`:''}></div><div class="c-body"><span class="c-tag">${escH(cs.tag)}</span><h3>${escH(cs.title)}</h3><p>${escH(cs.body)}</p><div class="c-stats"><div><b>${escH(cs.stat1_value)}</b><span>${escH(cs.stat1_label)}</span></div><div><b>${escH(cs.stat2_value)}</b><span>${escH(cs.stat2_label)}</span></div></div></div></article>`;
+
+  const fillId = (id, inner) => {
+    html = html.replace(new RegExp(`(id="${id}"[^>]*>)</div>`), (m, open) => open + inner + '</div>');
+  };
+  fillId('home-services',   (c.services||[]).map(s=>svcCard(s,true)).join(''));
+  fillId('services-grid',   (c.services||[]).map(s=>svcCard(s,false)).join(''));
+  fillId('home-plans',      (c.pricing||[]).map(planCard).join(''));
+  fillId('pricing-grid',    (c.pricing||[]).map(planCard).join(''));
+  fillId('home-industries', (c.industries||[]).slice(0,8).map(i=>`<a class="ind-tile reveal" href="/industries"><span class="ico">${escH(i.icon)}</span><b>${escH(i.name)}</b></a>`).join(''));
+  fillId('industries-grid', (c.industries||[]).map(i=>`<div class="ind-tile reveal"><span class="ico">${escH(i.icon)}</span><b>${escH(i.name)}</b></div>`).join(''));
+  fillId('services-process',(c.process||[]).map(stepEl).join(''));
+  fillId('about-process',   (c.process||[]).map(stepEl).join(''));
+  fillId('contact-process', (c.process||[]).map(stepEl).join(''));
+  fillId('cases-list',      (c.cases||[]).map(caseEl).join(''));
+  fillId('home-case',       (c.cases||[]).slice(0,1).map(caseEl).join(''));
+  fillId('industries-cases',(c.cases||[]).slice(0,2).map(caseEl).join(''));
+  return html;
+}
+
 function servePage(file) {
   return (_, res) => {
-    const html    = fs.readFileSync(path.join(PUBLIC_DIR, file), 'utf8');
+    let html      = fs.readFileSync(path.join(PUBLIC_DIR, file), 'utf8');
     const content = readContent();
+    html = ssrFill(html, content);
     res.send(html.replace(
       '<!-- __CONTENT_INJECT__ -->',
       `<script>window.__SITE_CONTENT__ = ${JSON.stringify(content)};</script>`
