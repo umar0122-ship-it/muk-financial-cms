@@ -26,7 +26,7 @@ FinFiscalPro provides remote bookkeeping, tax preparation, financial modelling, 
 
 ## Industries Served
 
-Construction and contractors (job costing, per-project P&Ls, WIP schedules), insurance restoration, real estate investors (property-level books, refinance packages), consultants and professional services (S-Corp strategy), healthcare, e-commerce, and CPA firm outsourcing.
+Construction companies and contractors (job costing, per-project P&Ls, WIP schedules, bonding-ready financials), insurance restoration, real estate agents and Realtors (1099 commission income tracking, agent S-Corp elections, brokerage bookkeeping, quarterly estimated taxes for agents), real estate investors (property-level books, depreciation, refinance packages), consulting firms and independent consultants (S-Corp strategy, reasonable compensation, quarterly tax planning), healthcare, e-commerce, and CPA firm outsourcing.
 
 ## Client Outcomes
 
