@@ -110,7 +110,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ── Main nav ────────────────────────────────────────────────── */
 .nav {
   position: sticky; top: 0; z-index: 1000;
-  background: rgba(10,22,40,.96); backdrop-filter: blur(14px) saturate(160%);
+  background: rgba(10,22,40,.98);
   border-bottom: 1px solid var(--line-dark);
   transition: box-shadow .3s ease;
 }
@@ -153,7 +153,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 920px) {
   .nav-toggle { display: block; }
   .nav-links {
-    position: fixed; top: 0; right: 0; bottom: 0; width: min(320px, 84vw);
+    position: fixed; top: 0; right: 0; bottom: 0; height: 100vh; height: 100dvh; width: min(320px, 84vw);
     background: var(--ink-2); flex-direction: column; align-items: stretch;
     padding: 92px 1.4rem 2rem; gap: .3rem;
     transform: translateX(105%); transition: transform .35s cubic-bezier(.4,0,.2,1);
